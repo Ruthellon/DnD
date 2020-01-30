@@ -25,12 +25,18 @@ namespace InitiativeApp
         public MainWindow()
         {
             InitializeComponent();
+            lstCharacters.ItemsSource = Characters;
         }
 
         private void BtnAddChar_Click(object sender, RoutedEventArgs e)
         {
-            Characters.Add(new Character(txtCharInput.Text, Convert.ToInt32(txtDexterity.Text), true));
-            txtResults.Text += txtCharInput.Text + Environment.NewLine;
+            int dexterity;
+            if (txtCharInput.Text != "" && Int32.TryParse(txtDexterity.Text, out dexterity))
+            {
+                Characters.Add(new Character(txtCharInput.Text, dexterity, true));
+                lstCharacters.ItemsSource = null;
+                lstCharacters.ItemsSource = Characters;
+            }
         }
 
         private void BtnRoll_Click(object sender, RoutedEventArgs e)
@@ -39,22 +45,33 @@ namespace InitiativeApp
             foreach (Character character in Characters)
             {
                 character.Initiative = rnd.Next(1, 20) + character.Dexterity;
+                character.GoneThisRound = false;
             }
-
-            txtResults.Text = "";
-
-            Characters.Sort((a, b) => a.Initiative.CompareTo(b.Initiative));
-
-            foreach (Character character in Characters)
-            {
-                txtResults.Text += character.Name + Environment.NewLine;
-            }
+            
+            Characters.Sort((a, b) => b.Initiative.CompareTo(a.Initiative));
+            
+            lstCharacters.ItemsSource = null;
+            lstCharacters.ItemsSource = Characters;
         }
 
         private void BtnNPCInput_Click(object sender, RoutedEventArgs e)
         {
-            Characters.Add(new Character(txtCharInput.Text, Convert.ToInt32(txtDexterity.Text), false));
-            txtResults.Text += txtCharInput.Text + Environment.NewLine;
+            int dexterity;
+            if (txtCharInput.Text != "" && Int32.TryParse(txtDexterity.Text, out dexterity))
+            {
+                int count = 1;
+                foreach (Character character in Characters)
+                {
+                    if (character.Name.Contains(txtCharInput.Text))
+                    {
+                        count++;
+                    }
+                }
+
+                Characters.Add(new Character(txtCharInput.Text + count.ToString(), dexterity, false));
+                lstCharacters.ItemsSource = null;
+                lstCharacters.ItemsSource = Characters;
+            }
         }
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
@@ -68,12 +85,51 @@ namespace InitiativeApp
                 }
             }
 
-            txtResults.Text = "";
+            lstCharacters.ItemsSource = null;
+            lstCharacters.ItemsSource = Characters;
+        }
 
-            foreach (Character character in Characters)
+        private void txtCharInput_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (txtCharInput.Text == "Character Name")
             {
-                txtResults.Text += character.Name + Environment.NewLine;
+                txtCharInput.Text = "";
             }
+        }
+
+        private void txtCharInput_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtCharInput.Text))
+            {
+                txtCharInput.Text = "Character Name";
+            }
+        }
+
+        private void txtDexterity_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (txtDexterity.Text == "Initiative")
+            {
+                txtDexterity.Text = "";
+            }
+        }
+
+        private void txtDexterity_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtDexterity.Text))
+            {
+                txtDexterity.Text = "Initiative";
+            }
+        }
+
+        private void delete_char_Click(object sender, RoutedEventArgs e)
+        {
+            ListBoxItem selectedItem = (ListBoxItem)lstCharacters.ItemContainerGenerator.ContainerFromItem(((Button)sender).DataContext);
+            selectedItem.IsSelected = true;
+
+            Characters.RemoveAt(lstCharacters.SelectedIndex);
+
+            lstCharacters.ItemsSource = null;
+            lstCharacters.ItemsSource = Characters;
         }
     }
 
@@ -90,5 +146,6 @@ namespace InitiativeApp
         public bool IsPC { get; set; }
         public int Initiative { get; set; }
         public int Dexterity { get; set; }
+        public bool GoneThisRound { get; set; } = false;
     }
 }
