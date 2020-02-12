@@ -76,19 +76,24 @@ namespace InitiativeApp
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < Characters.Count; i++)
-            {
-                if (!Characters[i].IsPC)
-                {
-                    Characters.RemoveAt(i);
-                    i--;
-                }
-            }
+            Characters.RemoveAll(s => !s.IsPC);
 
             lstCharacters.ItemsSource = null;
             lstCharacters.ItemsSource = Characters;
         }
 
+        private void delete_char_Click(object sender, RoutedEventArgs e)
+        {
+            ListBoxItem selectedItem = (ListBoxItem)lstCharacters.ItemContainerGenerator.ContainerFromItem(((Button)sender).DataContext);
+            selectedItem.IsSelected = true;
+
+            Characters.RemoveAt(lstCharacters.SelectedIndex);
+
+            lstCharacters.ItemsSource = null;
+            lstCharacters.ItemsSource = Characters;
+        }
+
+        #region Watermark
         private void txtCharInput_GotFocus(object sender, RoutedEventArgs e)
         {
             if (txtCharInput.Text == "Character Name")
@@ -120,17 +125,7 @@ namespace InitiativeApp
                 txtDexterity.Text = "Initiative";
             }
         }
-
-        private void delete_char_Click(object sender, RoutedEventArgs e)
-        {
-            ListBoxItem selectedItem = (ListBoxItem)lstCharacters.ItemContainerGenerator.ContainerFromItem(((Button)sender).DataContext);
-            selectedItem.IsSelected = true;
-
-            Characters.RemoveAt(lstCharacters.SelectedIndex);
-
-            lstCharacters.ItemsSource = null;
-            lstCharacters.ItemsSource = Characters;
-        }
+        #endregion
     }
 
     public class Character
