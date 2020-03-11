@@ -7,31 +7,41 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="txtCharInput" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character Name" VerticalAlignment="Top" Width="120" GotFocus="txtCharInput_GotFocus" LostFocus="txtCharInput_LostFocus"/>
-        <TextBox x:Name="txtDexterity" HorizontalAlignment="Left" Height="23" Margin="135,10,0,0" TextWrapping="Wrap" Text="Initiative" VerticalAlignment="Top" Width="87" GotFocus="txtDexterity_GotFocus" LostFocus="txtDexterity_LostFocus"/>
-        <Button x:Name="btnNPCInput" Content="Add NPC" HorizontalAlignment="Left" Margin="227,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnNPCInput_Click"/>
-        <Button x:Name="btnAddChar" Content="Add PC" HorizontalAlignment="Left" Margin="336,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnAddChar_Click"/>
-        <Button x:Name="btnClear" Content="Clear NPCs" HorizontalAlignment="Left" Margin="529,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
-        <Button x:Name="btnRoll" Content="Roll" HorizontalAlignment="Left" Margin="707,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnRoll_Click"/>
-        
-        
-        <ListBox x:Name="lstCharacters" HorizontalAlignment="Left" Height="373" Margin="10,38,0,0" VerticalAlignment="Top" Width="773" HorizontalContentAlignment="Stretch">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <CheckBox IsChecked="{Binding GoneThisRound}"  />
-                        <TextBlock Text="{Binding Name}" Grid.Column="1"  />
-                        <TextBlock Text="{Binding Initiative}" Grid.Column="2" />
-                        <Button Content="Delete Char" Click="delete_char_Click" Grid.Column="3" ></Button>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <TabControl>
+            <TabItem Header="Character Info">
+                <Grid>
+                    <TextBlock x:Name="txtBlock" TextWrapping="Wrap" Text="" Margin="10"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Initiative">
+                <Grid>
+                    <TextBox x:Name="txtCharInput" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character Name" VerticalAlignment="Top" Width="120" GotFocus="txtCharInput_GotFocus" LostFocus="txtCharInput_LostFocus"/>
+                    <TextBox x:Name="txtDexterity" HorizontalAlignment="Left" Height="23" Margin="135,10,0,0" TextWrapping="Wrap" Text="Initiative" VerticalAlignment="Top" Width="87" GotFocus="txtDexterity_GotFocus" LostFocus="txtDexterity_LostFocus"/>
+                    <Button x:Name="btnNPCInput" Content="Add NPC" HorizontalAlignment="Left" Margin="227,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnNPCInput_Click"/>
+                    <Button x:Name="btnAddChar" Content="Add PC" HorizontalAlignment="Left" Margin="336,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnAddChar_Click"/>
+                    <Button x:Name="btnClear" Content="Clear NPCs" HorizontalAlignment="Left" Margin="529,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
+                    <Button x:Name="btnRoll" Content="Roll" HorizontalAlignment="Left" Margin="707,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnRoll_Click"/>
+
+                    <ListBox x:Name="lstCharacters" HorizontalAlignment="Left" Height="373" Margin="10,38,0,0" VerticalAlignment="Top" Width="773" HorizontalContentAlignment="Stretch">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox IsChecked="{Binding GoneThisRound}"  />
+                                    <TextBlock Text="{Binding Name}" Grid.Column="1"  />
+                                    <TextBlock Text="{Binding Initiative}" Grid.Column="2" />
+                                    <Button Content="Delete Char" Click="delete_char_Click" Grid.Column="3" ></Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
