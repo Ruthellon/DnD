@@ -20,7 +20,8 @@ namespace InitiativeApp
             new Tuple<string, string>("Leedle", "https://www.dndbeyond.com/character/22081606/json"),
             new Tuple<string, string>("Key", "https://www.dndbeyond.com/character/22960105/json"),
             new Tuple<string, string>("Jon", "https://www.dndbeyond.com/character/21973481/json"),
-            new Tuple<string, string>("Shazlight", "https://www.dndbeyond.com/character/21211796/json")};
+            new Tuple<string, string>("Shazlight", "https://www.dndbeyond.com/character/21211796/json"),
+            new Tuple<string, string>("Matthias", "https://www.dndbeyond.com/character/24606603/json")};
 
         private List<Character> Characters = new List<Character>();
         private static System.Timers.Timer localTimer;
