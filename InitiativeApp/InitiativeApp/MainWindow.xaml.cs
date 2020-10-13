@@ -16,12 +16,17 @@ namespace InitiativeApp
     public partial class MainWindow : Window
     {
         private List<Tuple<string, string>> characterList = new List<Tuple<string, string>>() {
-            new Tuple<string, string>("Hella", "https://www.dndbeyond.com/character/22078134/json"),
-            new Tuple<string, string>("Leedle", "https://www.dndbeyond.com/character/22081606/json"),
-            new Tuple<string, string>("Key", "https://www.dndbeyond.com/character/22960105/json"),
-            new Tuple<string, string>("Jon", "https://www.dndbeyond.com/character/21973481/json"),
-            new Tuple<string, string>("Shazlight", "https://www.dndbeyond.com/character/21211796/json"),
-            new Tuple<string, string>("Matthias", "https://www.dndbeyond.com/character/24606603/json")};
+            new Tuple<string, string>("Whirlwind", "https://www.dndbeyond.com/character/25392280/json"),
+            new Tuple<string, string>("FigHope", "https://www.dndbeyond.com/character/25881437/json"),
+            new Tuple<string, string>("Azariah", "https://www.dndbeyond.com/character/25918583/json"),
+            new Tuple<string, string>("Sala", "https://www.dndbeyond.com/character/25719833/json"),
+            new Tuple<string, string>("Athorn", "https://www.dndbeyond.com/character/36209461/json")
+            //new Tuple<string, string>("Amery", "https://www.dndbeyond.com/character/25889912/json"),
+            //new Tuple<string, string>("Lorcan", "https://www.dndbeyond.com/character/25881241/json"),
+            //new Tuple<string, string>("Shazdin", "https://www.dndbeyond.com/character/26202482/json"),
+            //new Tuple<string, string>("Ayla", "https://www.dndbeyond.com/character/26221573/json"),
+            //new Tuple<string, string>("Wiley", "https://www.dndbeyond.com/character/29677385/json")
+        };
 
         private List<Character> Characters = new List<Character>();
         private static System.Timers.Timer localTimer;
@@ -34,6 +39,29 @@ namespace InitiativeApp
             localTimer.Elapsed += LocalTimer_Elapsed;
             localTimer.AutoReset = true;
             localTimer.Enabled = true;
+
+            try
+            {
+                using (StreamReader read = new StreamReader("characters.txt"))
+                {
+                    while (!read.EndOfStream)
+                    {
+                        string character = read.ReadLine();
+
+                        string charName = character.Split(',')[0];
+                        int dex = Convert.ToInt32(character.Split(',')[1]);
+                        bool ispc = Convert.ToBoolean(character.Split(',')[2]);
+                        Characters.Add(new Character(charName, dex, ispc));
+                    }
+
+                    lstCharacters.ItemsSource = null;
+                    lstCharacters.ItemsSource = Characters;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         private bool firstRun = true;
@@ -100,6 +128,8 @@ namespace InitiativeApp
                     txtBlock.Text += "Char: " + character.Item1 + " ( " + level + " )" + Environment.NewLine;
                     txtBlock.Text += "     HP: " + (maxHealth - removedPoints) + " / " + maxHealth + Environment.NewLine;
                     txtBlock.Text += "     Inspiration: " + hasInspiration + Environment.NewLine;
+
+                    scroll.ScrollToEnd();
                 });
 
                 System.Threading.Thread.Sleep(2000);
@@ -108,6 +138,7 @@ namespace InitiativeApp
             this.Dispatcher.Invoke(() =>
             {
                 txtBlock.Text += Environment.NewLine + DateTime.Now.ToLongTimeString() + ": Retrieved" + Environment.NewLine;
+                scroll.ScrollToEnd();
             });
         }
 
@@ -116,9 +147,27 @@ namespace InitiativeApp
             int dexterity;
             if (txtCharInput.Text != "" && Int32.TryParse(txtDexterity.Text, out dexterity))
             {
-                Characters.Add(new Character(txtCharInput.Text, dexterity, true));
-                lstCharacters.ItemsSource = null;
-                lstCharacters.ItemsSource = Characters;
+                if (!chkbxIsNPC.IsChecked.Value)
+                {
+                    Characters.Add(new Character(txtCharInput.Text, dexterity, true));
+                    lstCharacters.ItemsSource = null;
+                    lstCharacters.ItemsSource = Characters;
+                }
+                else
+                {
+                    int count = 1;
+                    foreach (Character character in Characters)
+                    {
+                        if (character.Name.Contains(txtCharInput.Text))
+                        {
+                            count++;
+                        }
+                    }
+
+                    Characters.Add(new Character(txtCharInput.Text + count.ToString(), dexterity, false));
+                    lstCharacters.ItemsSource = null;
+                    lstCharacters.ItemsSource = Characters;
+                }
             }
         }
 
@@ -137,32 +186,23 @@ namespace InitiativeApp
             lstCharacters.ItemsSource = Characters;
         }
 
-        private void BtnNPCInput_Click(object sender, RoutedEventArgs e)
-        {
-            int dexterity;
-            if (txtCharInput.Text != "" && Int32.TryParse(txtDexterity.Text, out dexterity))
-            {
-                int count = 1;
-                foreach (Character character in Characters)
-                {
-                    if (character.Name.Contains(txtCharInput.Text))
-                    {
-                        count++;
-                    }
-                }
-
-                Characters.Add(new Character(txtCharInput.Text + count.ToString(), dexterity, false));
-                lstCharacters.ItemsSource = null;
-                lstCharacters.ItemsSource = Characters;
-            }
-        }
-
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
             Characters.RemoveAll(s => !s.IsPC);
 
             lstCharacters.ItemsSource = null;
             lstCharacters.ItemsSource = Characters;
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            using (StreamWriter write = new StreamWriter("characters.txt"))
+            {
+                foreach (Character character in Characters)
+                {
+                    write.WriteLine(character.Name + "," + character.Dexterity + "," + character.IsPC);
+                }
+            }
         }
 
         private void delete_char_Click(object sender, RoutedEventArgs e)
