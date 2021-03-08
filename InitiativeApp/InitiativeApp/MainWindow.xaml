@@ -5,46 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitiativeApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TabControl>
-            <TabItem Header="Character Info">
-                <Grid>
-                    <ScrollViewer x:Name="scroll" >
-                        <TextBlock x:Name="txtBlock" TextWrapping="Wrap" Text="" Margin="10"/>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Initiative">
-                <Grid>
-                    <TextBox x:Name="txtCharInput" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Character Name" VerticalAlignment="Top" Width="120" GotFocus="txtCharInput_GotFocus" LostFocus="txtCharInput_LostFocus"/>
-                    <TextBox x:Name="txtDexterity" HorizontalAlignment="Left" Height="23" Margin="135,10,0,0" TextWrapping="Wrap" Text="Initiative" VerticalAlignment="Top" Width="55" GotFocus="txtDexterity_GotFocus" LostFocus="txtDexterity_LostFocus"/>
-                    <CheckBox x:Name="chkbxIsNPC" Content="Is NPC" HorizontalAlignment="Left" Margin="195,12,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btnAddChar" Content="Add" HorizontalAlignment="Left" Margin="278,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnAddChar_Click"/>
-                    <Button x:Name="btnClear" Content="Clear NPCs" HorizontalAlignment="Left" Margin="376,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
-                    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="512,12,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click"/>
-                    <Button x:Name="btnRoll" Content="Roll" Margin="701,12,0,0" VerticalAlignment="Top" Click="BtnRoll_Click" HorizontalAlignment="Left" Width="75"/>
-
-                    <ListBox x:Name="lstCharacters" Margin="10,38,3,0" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <CheckBox IsChecked="{Binding GoneThisRound}"  />
-                                    <TextBlock Text="{Binding Name}" Grid.Column="1"  />
-                                    <TextBlock Text="{Binding Initiative}" Grid.Column="2" />
-                                    <Button Content="Delete Char" Click="delete_char_Click" Grid.Column="3" ></Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        Title="MainWindow" Height="1080" Width="1920" WindowStyle="None" WindowState="Maximized">
+    <Grid x:Name="charinfogrid" Background="Magenta">
+        <Label Content="0" x:Name="TimerLabel" Margin="0,0,0,0" Foreground="White" FontSize="18" FontWeight="Bold"/>
     </Grid>
 </Window>
